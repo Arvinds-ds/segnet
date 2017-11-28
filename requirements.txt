@@ -4,6 +4,5 @@ jupyter
 matplotlib
 Pillow
 scikit-learn
-tensorflow		# CPU Version of TensorFlow.
-# tensorflow-gpu	# GPU version of TensorFlow.
+tensorflow-gpu
 edward
