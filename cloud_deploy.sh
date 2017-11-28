@@ -122,6 +122,63 @@ $ENV_PATH/envs/$ENV_NAME/bin/pip install edward
 if [[ $?==0 ]]; then
     echo -e $BLUE"Finished creating Conda environment. Any errors directly above regarding psutil or \"command not found\" can probably be ignored."$NC
 
+    # Append environment setup commands to shell startup files if desired and using bash or zsh
+
+    SHELL_NAME=`basename $SHELL`
+    SHELLRC="$HOME/.${SHELL_NAME}rc"
+
+    if [[ ($SHELL_NAME == "zsh") || ($SHELL_NAME == "bash") ]]; then
+
+        read -p $'\e[1;34mAppend environment creation variables to shell setup file (.bashrc/.zshrc)? [Y/N]: \e[0m' APPEND
+
+        if [[ ($APPEND == "Y") || ($APPEND == "y") ]]; then
+
+            SHELL_APPEND='\n
+            #### Appended by setup_conda.sh #### \n\n
+            if [[ -e '"$ENV_PATH"'/bin ]]; then \n
+            \t     export PATH='"$ENV_PATH"'/bin:$PATH \n
+            \t     source activate '"$ENV_NAME"' \n
+            fi \n'
+
+            echo -e $SHELL_APPEND >> $SHELLRC
+            echo -e $BLUE"Appended Conda environment setup commands to $SHELLRC"$NC
+
+        else
+            echo -e $BLUE"No changes were made to $SHELLRC"$NC
+        fi
+    fi
+
+    # Jupyter's tokens are a pain when dealing with remote access and not really required
+    # if SSH tunnels are used in a trusted environment
+
+    read -p $'\e[1;34mSetup Jupyter config for remote access? [Y/N]: \e[0m' GENERATE_CONFIG
+
+    if [[ ($GENERATE_CONFIG == "Y") || ($GENERATE_CONFIG == "y") ]]; then
+
+        # Backup config file if one exists
+        if [[ -e $HOME/.jupyter/jupyter_notebook_config.py ]]; then
+            mv -f $HOME/.jupyter/jupyter_notebook_config.py     $HOME/.jupyter/jupyter_notebook_config_bkup.py
+        fi
+
+        # Create new config file
+        jupyter notebook --generate-config -y
+
+        # Fix settings for config file
+        cat $HOME/.jupyter/jupyter_notebook_config.py \
+        | sed "s/#c.NotebookApp.password = ''/c.NotebookApp.password = ''/g" \
+        | sed "s/#c.NotebookApp.token = '<generated>'/c.NotebookApp.token = ''/g" \
+        | sed "s/#c.NotebookApp.open_browser = True/c.NotebookApp.open_browser = False/g" \
+        > $HOME/.jupyter/jupyter_notebook_config_new.py
+
+        mv -f $HOME/.jupyter/jupyter_notebook_config_new.py $HOME/.jupyter/jupyter_notebook_config.py
+
+        echo -e $BLUE"Jupyter configuration setup."$NC
+
+    else
+        echo -e $BLUE"No Jupyter config file generated."$NC
+        echo -e $BLUE"A token from the command line may have to be entered when accessing notebook remotely."$NC
+    fi
+
 else
     echo -e $RED"There was an error creating the Conda environment."$NC
 fi

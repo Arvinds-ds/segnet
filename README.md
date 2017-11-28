@@ -21,21 +21,26 @@ the script `cloud_deploy.sh` script in the repo to automatically install relevan
 #### Clone the repo
 
 `$ git clone https://github.com/Arvinds-ds/segnet.git`
+
 `$ cd segnet`
 
 Follow the instructions for one of two scenarios :-
 
 - Local GPU machines
+
 - Cloud based GPU machines (simplifies a few steps)
 
 #### A. Setup Environment (Non-cloud GPU machines)
 
 `$ python3 -m venv ~/bayes-seg`
+
 `$ source ~/bayes-seg/bin/activate bayes-seg`
+
 `$ pip install -r requirements.txt`
 
 #### B. Setup Environment (Cloud-Based GPU machines)
 Post setting up a GPU instance with CUDA drivers properly installed
 
 `$ ./cloud_deploy.sh bayes-seg`
+
 `$ source ~/bayes-seg/bin/activate bayes-seg`
