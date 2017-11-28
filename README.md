@@ -30,6 +30,8 @@ Follow the instructions for one of two scenarios :-
 
 - Cloud based GPU machines (simplifies a few steps)
 
+
+
 #### A. Setup Environment (Non-cloud GPU machines)
 
 `$ python3 -m venv ~/bayes-seg`
@@ -43,4 +45,16 @@ Post setting up a GPU instance with CUDA drivers properly installed
 
 `$ ./cloud_deploy.sh bayes-seg`
 
-`$ source ~/bayes-seg/bin/activate bayes-seg`
+Select Y to configure jupyter-notebook without password
+
+`$ source ~/miniconda/envs/bayes-seg/bin/activate bayes-seg`
+
+`$ jupyter-notebook --ip=0.0.0.0 --port=8888 --no-browser &`
+
+Run the notebook from cloud using URL http://<instance_external_ip>:8888
+
+##### Already Hosted Solution on GCP for running
+
+Put URL when instance is up..
+
+
