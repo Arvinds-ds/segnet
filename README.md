@@ -1,11 +1,15 @@
 ### Bayesian Semantic Segmentation
 
+#### Relevant files
+Main Notebook: __Bayesian Semantic Segmentation.ipynb__
+Utils file: __segnet_utils.py__
+
 #### Note:
 
 These models will only work on GPU based hardware due to the following reasons
 
 - The CPU computations are painfully slow
-- The models use the function `tf.nn.max_pool_with_argmax` for the unpooling operation which is built only for GPU (See Issue: [https://github.com/tensorflow/tensorflow/issues/6035]()). This has not been resolved for CPU
+- The models use the function `tf.nn.max_pool_with_argmax` for the unpooling operation which is built only for GPU (See Issue: [https://github.com/tensorflow/tensorflow/issues/6035](https://github.com/tensorflow/tensorflow/issues/6035). This has not been resolved for CPU
 
 #### How to run on laptop without GPU
 1. Amazon P2 instance
